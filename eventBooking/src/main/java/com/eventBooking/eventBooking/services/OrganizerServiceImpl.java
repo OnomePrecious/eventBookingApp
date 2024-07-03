@@ -17,12 +17,14 @@ public class OrganizerServiceImpl implements OrganizerService {
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
     private final OrganizerRepository organizerRepository;
+
     @Autowired
-    public OrganizerServiceImpl(ModelMapper modelMapper, PasswordEncoder passwordEncoder, OrganizerRepository organizerRepository){
+    public OrganizerServiceImpl(ModelMapper modelMapper, PasswordEncoder passwordEncoder, OrganizerRepository organizerRepository) {
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
         this.organizerRepository = organizerRepository;
     }
+
     @Override
     public RegisterResponse registerOrganizer(RegisterRequest registerRequest) {
         Organizer organizer = modelMapper.map(registerRequest, Organizer.class);
@@ -35,13 +37,7 @@ public class OrganizerServiceImpl implements OrganizerService {
         return registerResponse;
 
 
-
     }
 
-
-    @Override
-    public AddTicketToEventResponse addTicketToEvent(AddTicketToEventRequest addTicketToEventRequest) {
-        return null;
-    }
 
 }

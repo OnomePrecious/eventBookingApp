@@ -15,7 +15,9 @@ public class Ticket {
     @Id
     private Long id;
     private TicketType ticketType;
-    @ManyToOne
-    private Event event;
+    private Double price;
+    private EventType event;
+
+
 
 }

@@ -11,6 +11,8 @@ import com.eventBooking.eventBooking.dtos.Response.AddTicketToEventResponse;
 import com.eventBooking.eventBooking.dtos.Response.CreateAnEventResponse;
 import com.eventBooking.eventBooking.dtos.Response.CreateDiscountForTicketResponse;
 import com.eventBooking.eventBooking.dtos.Response.RegisterResponse;
+import com.eventBooking.eventBooking.exception.NoTicketsAvailableException;
+import com.eventBooking.eventBooking.exception.OrganizerDoesNotExistException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,8 +35,8 @@ private DiscountService discountService;
     @Test
     void testThatAnOrganizerCanAddDiscountToTicket() {
         RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setUsername("my username");
-        registerRequest.setEmail("myname@gmail.com");
+        registerRequest.setUsername("Precious");
+        registerRequest.setEmail("precious@gmail.com");
         registerRequest.setPassword("my password");
        RegisterResponse organizer = organizerService.registerOrganizer(registerRequest);
 
@@ -65,6 +67,48 @@ private DiscountService discountService;
     }
     @Test
     public void testThrowsExceptionWhenOrganizerTriesToGiveDiscountWithoutTicket(){
+        RegisterRequest registerRequest = new RegisterRequest();
+        registerRequest.setUsername("my username");
+        registerRequest.setEmail("myname@gmail.com");
+        registerRequest.setPassword("my password");
+        RegisterResponse organizer = organizerService.registerOrganizer(registerRequest);
+
+        CreateAnEventRequest createAnEventRequest = new CreateAnEventRequest();
+        createAnEventRequest.setId(organizer.getId());
+        createAnEventRequest.setTypeOfEvent(EventType.BIRTHDAY);
+        createAnEventRequest.setAddress("Abuja");
+        createAnEventRequest.setNumberOfTickets(50);
+        createAnEventRequest.setNumberOfGuest(50);
+        CreateAnEventResponse response = eventService.createEvent(createAnEventRequest);
+
+        CreateDiscountForTicketRequest createDiscountForTicketRequest = new CreateDiscountForTicketRequest();
+        createDiscountForTicketRequest.setPercentage(10);
+        createDiscountForTicketRequest.setPrice(4000.0);
+        createDiscountForTicketRequest.setId(response.getId());
+        assertThrows(NoTicketsAvailableException.class, () -> discountService.createDiscountForTicket(createDiscountForTicketRequest));
+    }
+    @Test
+    public void throwsExceptionWhenTheOrganizerIsNotRegisteredButTriesToGivesDiscount(){
+        CreateAnEventRequest createAnEventRequest = new CreateAnEventRequest();
+        createAnEventRequest.setId(1L);
+        createAnEventRequest.setTypeOfEvent(EventType.BIRTHDAY);
+        createAnEventRequest.setAddress("Abuja");
+        createAnEventRequest.setNumberOfTickets(50);
+        createAnEventRequest.setNumberOfGuest(50);
+        CreateAnEventResponse createEventResponse = eventService.createEvent(createAnEventRequest);
+        AddTicketToEventRequest addTicketToEventRequest = new AddTicketToEventRequest();
+        addTicketToEventRequest.setTicketType(TicketType.REGULAR);
+        addTicketToEventRequest.setId(createEventResponse.getId());
+        addTicketToEventRequest.setPrice(4000.0);
+        addTicketToEventRequest.setAvailableSeats(40);
+//        addTicketToEventRequest.setTypeOfEvent(response.getEventType());
+        AddTicketToEventResponse addTicketToEventResponse = ticketService.addTicketToEvent(addTicketToEventRequest);
+
+        CreateDiscountForTicketRequest createDiscountForTicketRequest = new CreateDiscountForTicketRequest();
+        createDiscountForTicketRequest.setPercentage(10);
+        createDiscountForTicketRequest.setPrice(4000.0);
+        createDiscountForTicketRequest.setId(addTicketToEventResponse.getId());
+        assertThrows(OrganizerDoesNotExistException.class, () -> discountService.createDiscountForTicket(createDiscountForTicketRequest));
 
     }
 }

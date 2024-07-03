@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 public class CreateDiscountForTicketRequest {
     private Long id;
+    private Long organizerId;
     private double price;
     private int percentage;
     private TicketType ticketType;

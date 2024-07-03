@@ -9,5 +9,5 @@ import lombok.Setter;
 public class Event {
     private Long id;
     private EventType typeOfEvent;
-    private Ticket ticket;
+    private TicketType typeOfTicket;
 }

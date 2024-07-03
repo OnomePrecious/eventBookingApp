@@ -1,11 +1,10 @@
 package com.eventBooking.eventBooking.data.repositories;
 
 import com.eventBooking.eventBooking.data.models.Guest;
-import com.eventBooking.eventBooking.data.models.Organizer;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
 public interface GuestRepository extends JpaRepository<Guest, Long> {
-    List<Guest> findGuestsByOrganizerId(Long organizerId);
+    List<Guest> findGuestsByGuestId(Long guestId);
 }

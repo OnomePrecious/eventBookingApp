@@ -1,13 +1,16 @@
 package com.eventBooking.eventBooking.services;
 
 import com.eventBooking.eventBooking.data.models.Discount;
+import com.eventBooking.eventBooking.data.models.Organizer;
 import com.eventBooking.eventBooking.data.models.Ticket;
 import com.eventBooking.eventBooking.data.repositories.DiscountRepository;
 import com.eventBooking.eventBooking.data.repositories.EventRepository;
+import com.eventBooking.eventBooking.data.repositories.OrganizerRepository;
 import com.eventBooking.eventBooking.data.repositories.TicketRepository;
 import com.eventBooking.eventBooking.dtos.Request.CreateDiscountForTicketRequest;
 import com.eventBooking.eventBooking.dtos.Response.CreateDiscountForTicketResponse;
 import com.eventBooking.eventBooking.exception.NoTicketsAvailableException;
+import com.eventBooking.eventBooking.exception.OrganizerDoesNotExistException;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Service;
 public class DiscountServiceImpl implements DiscountService{
     private final TicketRepository ticketRepository;
     private final DiscountRepository discountRepository;
+    private final OrganizerRepository organizerRepository;
     private ModelMapper modelMapper;
 
 
@@ -24,9 +28,11 @@ public class DiscountServiceImpl implements DiscountService{
     public CreateDiscountForTicketResponse createDiscountForTicket(CreateDiscountForTicketRequest createDiscountForTicketrequest) {
         Discount discount = new Discount();
         Ticket ticket = ticketRepository.findById(createDiscountForTicketrequest.getId()).orElseThrow(()-> new NoTicketsAvailableException("No tickets available for discount"));
+        Organizer organizer = organizerRepository.findById(createDiscountForTicketrequest.getOrganizerId()).orElseThrow(()-> new OrganizerDoesNotExistException("No organizer available"));
         modelMapper.map(discount, createDiscountForTicketrequest);
         discountRepository.save(discount);
         ticketRepository.save(ticket);
+        organizerRepository.save(organizer);
         CreateDiscountForTicketResponse createDiscountForTicketResponse = modelMapper.map(discount, CreateDiscountForTicketResponse.class);
         createDiscountForTicketResponse.setMessage("Discount successfully set");
         return createDiscountForTicketResponse;

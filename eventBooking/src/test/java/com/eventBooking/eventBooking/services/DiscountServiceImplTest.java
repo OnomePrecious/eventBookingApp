@@ -11,6 +11,7 @@ import com.eventBooking.eventBooking.dtos.Response.AddTicketToEventResponse;
 import com.eventBooking.eventBooking.dtos.Response.CreateAnEventResponse;
 import com.eventBooking.eventBooking.dtos.Response.CreateDiscountForTicketResponse;
 import com.eventBooking.eventBooking.dtos.Response.RegisterResponse;
+import com.eventBooking.eventBooking.exception.NoExistingEventException;
 import com.eventBooking.eventBooking.exception.NoTicketsAvailableException;
 import com.eventBooking.eventBooking.exception.OrganizerDoesNotExistException;
 import org.junit.jupiter.api.Test;
@@ -95,20 +96,23 @@ private DiscountService discountService;
         createAnEventRequest.setAddress("Abuja");
         createAnEventRequest.setNumberOfTickets(50);
         createAnEventRequest.setNumberOfGuest(50);
-        CreateAnEventResponse createEventResponse = eventService.createEvent(createAnEventRequest);
+//        CreateAnEventResponse createEventResponse = eventService.createEvent(createAnEventRequest);
+        assertThrows(OrganizerDoesNotExistException.class, () -> eventService.createEvent(createAnEventRequest));
+
         AddTicketToEventRequest addTicketToEventRequest = new AddTicketToEventRequest();
         addTicketToEventRequest.setTicketType(TicketType.REGULAR);
-        addTicketToEventRequest.setId(createEventResponse.getId());
+        addTicketToEventRequest.setId(createAnEventRequest.getId());
         addTicketToEventRequest.setPrice(4000.0);
         addTicketToEventRequest.setAvailableSeats(40);
-//        addTicketToEventRequest.setTypeOfEvent(response.getEventType());
-        AddTicketToEventResponse addTicketToEventResponse = ticketService.addTicketToEvent(addTicketToEventRequest);
+        addTicketToEventRequest.setTypeOfEvent(createAnEventRequest.getTypeOfEvent());
+        assertThrows(NoExistingEventException.class, () -> ticketService.addTicketToEvent(addTicketToEventRequest));
+
 
         CreateDiscountForTicketRequest createDiscountForTicketRequest = new CreateDiscountForTicketRequest();
         createDiscountForTicketRequest.setPercentage(10);
         createDiscountForTicketRequest.setPrice(4000.0);
-        createDiscountForTicketRequest.setId(addTicketToEventResponse.getId());
-        assertThrows(OrganizerDoesNotExistException.class, () -> discountService.createDiscountForTicket(createDiscountForTicketRequest));
+        createDiscountForTicketRequest.setId(addTicketToEventRequest.getId());
+        assertThrows(NoTicketsAvailableException.class, () -> discountService.createDiscountForTicket(createDiscountForTicketRequest));
 
     }
 }

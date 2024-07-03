@@ -28,6 +28,4 @@ import static jakarta.persistence.GenerationType.IDENTITY;
         private List<EventType> event;
 
 
-
-
     }

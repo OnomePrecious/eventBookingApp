@@ -1,5 +1,6 @@
 package com.eventBooking.eventBooking.data.models;
 
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,4 +17,6 @@ public class Event {
     private TicketType typeOfTicket;
     @OneToMany
     private List<Ticket> tickets= new ArrayList<>();
+    @ManyToOne
+    private Organizer organizer;
 }

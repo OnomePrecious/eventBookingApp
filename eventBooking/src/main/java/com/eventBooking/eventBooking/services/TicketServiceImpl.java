@@ -24,6 +24,7 @@ public class TicketServiceImpl implements TicketService{
         Event event = eventRepository.findById(addTicketToEventRequest.getId()).orElseThrow(()-> new NoExistingEventException("No events available to add tickets"));
         modelMapper.map(ticket, addTicketToEventRequest);
         eventRepository.save(event);
+        ticketRepository.save(ticket);
 //        ticket.setEvent(addTicketToEventRequest.getEvent());
 //        ticket.setTicketType(addTicketToEventRequest.getTicketType());
 //        ticket.setPrice(addTicketToEventRequest.getPrice());

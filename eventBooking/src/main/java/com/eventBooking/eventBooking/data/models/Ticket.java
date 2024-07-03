@@ -1,18 +1,18 @@
 package com.eventBooking.eventBooking.data.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "tickets")
+@ToString
+@Table(name="tickets")
 public class Ticket {
     @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
     private TicketType ticketType;
     private Double price;

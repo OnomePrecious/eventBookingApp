@@ -21,6 +21,7 @@ class OrganizerServiceImplTest {
         RegisterResponse registerResponse = organizerService.registerOrganizer(registerRequest);
         assertNotNull(registerResponse);
         assertTrue(registerResponse.getMessage().contains("success"));
+        assertEquals("my username", registerRequest.getUsername());
     }
 
     @Test

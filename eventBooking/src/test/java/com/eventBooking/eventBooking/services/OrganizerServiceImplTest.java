@@ -43,7 +43,7 @@ class OrganizerServiceImplTest {
         RegisterResponse organizer = organizerService.registerOrganizer(registerRequest);
 
         CreateGuestListRequest addToGuestList = new CreateGuestListRequest();
-        addToGuestList.setOrganizerId(organizer.getId());
+        addToGuestList.setGuestId(organizer.getId());
         addToGuestList.setGuestName("John Doe");
         addToGuestList.setGuestName("Abigail Peter");
         addToGuestList.setGuestName("Michael Johnson");

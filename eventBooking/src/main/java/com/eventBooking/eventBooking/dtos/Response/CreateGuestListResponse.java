@@ -9,6 +9,6 @@ import java.util.List;
 @Setter
 public class CreateGuestListResponse {
     private Long id;
-    private List<Guest> guestList;
+    private int numberOfGuest;
     private String message;
 }

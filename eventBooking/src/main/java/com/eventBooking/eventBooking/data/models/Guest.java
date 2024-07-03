@@ -12,6 +12,7 @@ public class Guest {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    private Long organizerId;
     private String name;
     @ManyToOne
     private Organizer organizer;

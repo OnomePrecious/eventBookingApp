@@ -8,7 +8,6 @@ import com.eventBooking.eventBooking.dtos.Request.CreateGuestListRequest;
 import com.eventBooking.eventBooking.dtos.Request.RegisterRequest;
 import com.eventBooking.eventBooking.dtos.Response.CreateGuestListResponse;
 import com.eventBooking.eventBooking.dtos.Response.RegisterResponse;
-import com.eventBooking.eventBooking.exception.InvalidDetailsException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -46,12 +45,13 @@ public class OrganizerServiceImpl implements OrganizerService {
     @Override
     public CreateGuestListResponse createGuestList(CreateGuestListRequest createGuestListRequest) {
         Guest guest = new Guest();
-        guest.setName(createGuestListRequest.getName());
-        guest = guestRepository.save(guest);
-        CreateGuestListResponse createGuestListResponse = modelMapper.map(guest, CreateGuestListResponse.class);
+        guest.setName(createGuestListRequest.getGuestName());
+        guest.setOrganizerId(createGuestListRequest.getOrganizerId());
+        guestRepository.save(guest);
+        var guests = guestRepository.findGuestsByOrganizerId(createGuestListRequest.getOrganizerId());
+        CreateGuestListResponse createGuestListResponse = new CreateGuestListResponse();
+        createGuestListResponse.setNumberOfGuest(guests.size()); // Assuming no likes initially
         createGuestListResponse.setMessage("Guest list created successfully");
         return createGuestListResponse;
     }
-
-
 }

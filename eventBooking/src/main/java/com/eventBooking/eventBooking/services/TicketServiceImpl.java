@@ -24,8 +24,8 @@ public class TicketServiceImpl implements TicketService{
     @Override
     public AddTicketToEventResponse addTicketToEvent(AddTicketToEventRequest addTicketToEventRequest) {
         Ticket ticket = new Ticket();
-        Event event = eventRepository.findById(addTicketToEventRequest.getId()).orElseThrow(()-> new NoExistingEventException("No events available to add tickets"));
         Organizer organizer = organizationRepository.findById(addTicketToEventRequest.getId()).orElseThrow(()-> new OrganizerDoesNotExistException("No organizer available"));
+        Event event = eventRepository.findById(addTicketToEventRequest.getId()).orElseThrow(()-> new NoExistingEventException("No events available to add tickets"));
         modelMapper.map(ticket, addTicketToEventRequest);
         eventRepository.save(event);
         ticketRepository.save(ticket);

@@ -8,7 +8,8 @@ import lombok.Setter;
 @Setter
 public class CreateGuestListRequest {
     private Long id;
-    private String name;
+    private Long guestId;
+    private String GuestName;
     private TicketType ticketType;
 
 }

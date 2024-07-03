@@ -52,22 +52,19 @@ private DiscountService discountService;
         addTicketToEventRequest.setPrice(4000.0);
         addTicketToEventRequest.setAvailableSeats(40);
         addTicketToEventRequest.setTypeOfEvent(response.getEventType());
-        ticketService.addTicketToEvent(addTicketToEventRequest);
+        AddTicketToEventResponse addTicketToEventResponse = ticketService.addTicketToEvent(addTicketToEventRequest);
 
         CreateDiscountForTicketRequest createDiscountForTicketRequest = new CreateDiscountForTicketRequest();
         createDiscountForTicketRequest.setPercentage(10);
         createDiscountForTicketRequest.setPrice(4000.0);
+        createDiscountForTicketRequest.setId(addTicketToEventResponse.getId());
         CreateDiscountForTicketResponse createDiscountForTicketResponse =  discountService.createDiscountForTicket(createDiscountForTicketRequest);
         assertNotNull(createDiscountForTicketResponse);
         assertTrue(createDiscountForTicketResponse.getMessage().contains("success"));
-        assertEquals(10, createDiscountForTicketRequest.getPercentage());
-        assertEquals(4000.0, createDiscountForTicketRequest.getPrice());
-        assertEquals(TicketType.REGULAR, createDiscountForTicketRequest.getTicketType());
         assertEquals(1, discountRepository.count());
-
-
-
-
+    }
+    @Test
+    public void testThrowsExceptionWhenOrganizerTriesToGiveDiscountWithoutTicket(){
 
     }
 }

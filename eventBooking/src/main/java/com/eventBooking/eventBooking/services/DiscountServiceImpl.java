@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class DiscountServiceImpl implements DiscountService{
     private final TicketRepository ticketRepository;
-    private final EventRepository eventRepository;
     private final DiscountRepository discountRepository;
     private ModelMapper modelMapper;
 

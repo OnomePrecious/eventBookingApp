@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
     @Entity
     @Table(name = "organizers")
     @Setter
+    @ToString
     @Getter
     @NoArgsConstructor
     public class Organizer {
@@ -23,9 +25,10 @@ import static jakarta.persistence.GenerationType.IDENTITY;
         @Column(unique = true)
         private String email;
         private String password;
-        @ElementCollection
-        @Enumerated(EnumType.STRING)
-        private List<EventType> event;
+//        @ElementCollection
+//        @Enumerated(EnumType.STRING)
+//        private List<EventType> typeOfEvent;
+
 
 
     }

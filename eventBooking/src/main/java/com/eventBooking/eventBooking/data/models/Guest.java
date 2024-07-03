@@ -1,15 +1,15 @@
 package com.eventBooking.eventBooking.data.models;
 
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Getter
 @Setter
+@Entity
+@Table(name = "guests")
 public class Guest {
+    @Id
     private Long id;
     private String name;
     @ManyToOne

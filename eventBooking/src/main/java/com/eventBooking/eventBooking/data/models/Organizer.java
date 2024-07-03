@@ -26,8 +26,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
         @ElementCollection
         @Enumerated(EnumType.STRING)
         private List<EventType> event;
-        @OneToMany
-        private List<Guest> guestList = new ArrayList<>()
+
 
 
 

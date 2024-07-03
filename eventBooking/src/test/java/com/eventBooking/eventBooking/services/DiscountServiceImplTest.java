@@ -5,8 +5,11 @@ import com.eventBooking.eventBooking.data.models.TicketType;
 import com.eventBooking.eventBooking.data.repositories.DiscountRepository;
 import com.eventBooking.eventBooking.dtos.Request.AddTicketToEventRequest;
 import com.eventBooking.eventBooking.dtos.Request.CreateAnEventRequest;
+import com.eventBooking.eventBooking.dtos.Request.CreateDiscountForTicketRequest;
 import com.eventBooking.eventBooking.dtos.Request.RegisterRequest;
 import com.eventBooking.eventBooking.dtos.Response.AddTicketToEventResponse;
+import com.eventBooking.eventBooking.dtos.Response.CreateAnEventResponse;
+import com.eventBooking.eventBooking.dtos.Response.CreateDiscountForTicketResponse;
 import com.eventBooking.eventBooking.dtos.Response.RegisterResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,8 @@ private EventService eventService;
 private TicketService ticketService;
 @Autowired
 private DiscountRepository discountRepository;
+@Autowired
+private DiscountService discountService;
 
     @Test
     void testThatAnOrganizerCanAddDiscountToTicket() {
@@ -39,15 +44,29 @@ private DiscountRepository discountRepository;
         createAnEventRequest.setAddress("Abuja");
         createAnEventRequest.setNumberOfTickets(50);
         createAnEventRequest.setNumberOfGuest(50);
-        eventService.createEvent(createAnEventRequest);
+        CreateAnEventResponse response = eventService.createEvent(createAnEventRequest);
 
         AddTicketToEventRequest addTicketToEventRequest = new AddTicketToEventRequest();
         addTicketToEventRequest.setTicketType(TicketType.REGULAR);
         addTicketToEventRequest.setId(createAnEventRequest.getId());
         addTicketToEventRequest.setPrice(4000.0);
         addTicketToEventRequest.setAvailableSeats(40);
-        addTicketToEventRequest.setTypeOfEvent(EventType.CONCERT);
-        AddTicketToEventResponse addTicketToEventResponse = ticketService.addTicketToEvent(addTicketToEventRequest);
+        addTicketToEventRequest.setTypeOfEvent(response.getEventType());
+        ticketService.addTicketToEvent(addTicketToEventRequest);
+
+        CreateDiscountForTicketRequest createDiscountForTicketRequest = new CreateDiscountForTicketRequest();
+        createDiscountForTicketRequest.setPercentage(10);
+        createDiscountForTicketRequest.setPrice(4000.0);
+        CreateDiscountForTicketResponse createDiscountForTicketResponse =  discountService.createDiscountForTicket(createDiscountForTicketRequest);
+        assertNotNull(createDiscountForTicketResponse);
+        assertTrue(createDiscountForTicketResponse.getMessage().contains("success"));
+        assertEquals(10, createDiscountForTicketRequest.getPercentage());
+        assertEquals(4000.0, createDiscountForTicketRequest.getPrice());
+        assertEquals(TicketType.REGULAR, createDiscountForTicketRequest.getTicketType());
+        assertEquals(1, discountRepository.count());
+
+
+
 
 
     }

@@ -9,6 +9,5 @@ import com.eventBooking.eventBooking.dtos.Response.RegisterResponse;
 
 public interface OrganizerService {
     RegisterResponse registerOrganizer (RegisterRequest registerRequest);
-    CreateAnEventResponse createEvent (CreateAnEventRequest createEventRequest);
     AddTicketToEventResponse addTicketToEvent (AddTicketToEventRequest addTicketToEventRequest);
 }

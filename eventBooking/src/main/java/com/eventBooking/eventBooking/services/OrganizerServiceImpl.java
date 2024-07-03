@@ -1,6 +1,7 @@
 package com.eventBooking.eventBooking.services;
 
 import com.eventBooking.eventBooking.data.models.Organizer;
+import com.eventBooking.eventBooking.data.repositories.OrganizerRepository;
 import com.eventBooking.eventBooking.dtos.Request.AddTicketToEventRequest;
 import com.eventBooking.eventBooking.dtos.Request.CreateAnEventRequest;
 import com.eventBooking.eventBooking.dtos.Request.RegisterRequest;
@@ -15,10 +16,12 @@ import org.springframework.stereotype.Service;
 public class OrganizerServiceImpl implements OrganizerService {
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
+    private final OrganizerRepository organizerRepository;
     @Autowired
-    public OrganizerServiceImpl(ModelMapper modelMapper, PasswordEncoder passwordEncoder){
+    public OrganizerServiceImpl(ModelMapper modelMapper, PasswordEncoder passwordEncoder, OrganizerRepository organizerRepository){
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
+        this.organizerRepository = organizerRepository;
     }
     @Override
     public RegisterResponse registerOrganizer(RegisterRequest registerRequest) {
@@ -26,7 +29,8 @@ public class OrganizerServiceImpl implements OrganizerService {
         organizer.setUsername(registerRequest.getUsername());
         organizer.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         organizer.setEmail(registerRequest.getEmail());
-        RegisterResponse registerResponse = modelMapper.map(registerRequest, RegisterResponse.class);
+        organizer = organizerRepository.save(organizer);
+        RegisterResponse registerResponse = modelMapper.map(organizer, RegisterResponse.class);
         registerResponse.setMessage("Registration successful");
         return registerResponse;
 
@@ -34,10 +38,6 @@ public class OrganizerServiceImpl implements OrganizerService {
 
     }
 
-    @Override
-    public CreateAnEventResponse createEvent(CreateAnEventRequest createEventRequest) {
-        return null;
-    }
 
     @Override
     public AddTicketToEventResponse addTicketToEvent(AddTicketToEventRequest addTicketToEventRequest) {

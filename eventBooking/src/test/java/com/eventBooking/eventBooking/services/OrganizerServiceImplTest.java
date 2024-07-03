@@ -1,5 +1,7 @@
 package com.eventBooking.eventBooking.services;
 
+import com.eventBooking.eventBooking.data.repositories.OrganizerRepository;
+import com.eventBooking.eventBooking.dtos.Request.CreateAnEventRequest;
 import com.eventBooking.eventBooking.dtos.Request.RegisterRequest;
 import com.eventBooking.eventBooking.dtos.Response.RegisterResponse;
 import org.junit.jupiter.api.Test;
@@ -11,6 +13,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class OrganizerServiceImplTest {
     @Autowired
     private OrganizerService organizerService;
+    @Autowired
+    private OrganizerRepository organizerRepository;
 
     @Test
     void testThatAnOrganizerCanRegister() {
@@ -22,13 +26,7 @@ class OrganizerServiceImplTest {
         assertNotNull(registerResponse);
         assertTrue(registerResponse.getMessage().contains("success"));
         assertEquals("my username", registerRequest.getUsername());
+        assertEquals(1, organizerRepository.count());
     }
 
-    @Test
-    void createEvent() {
-    }
-
-    @Test
-    void addTicketToEvent() {
-    }
 }

@@ -9,6 +9,7 @@ import com.eventBooking.eventBooking.dtos.Request.RegisterRequest;
 import com.eventBooking.eventBooking.dtos.Response.AddTicketToEventResponse;
 import com.eventBooking.eventBooking.dtos.Response.CreateAnEventResponse;
 import com.eventBooking.eventBooking.dtos.Response.RegisterResponse;
+import com.eventBooking.eventBooking.exception.NoExistingEventException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,7 +32,6 @@ private TicketRepository ticketRepository;
         registerRequest.setEmail("myname@gmail.com");
         registerRequest.setPassword("my password");
         RegisterResponse organizer = organizerService.registerOrganizer(registerRequest);
-//        assertNotNull(organizer.getId());
 
         CreateAnEventRequest createAnEventRequest = new CreateAnEventRequest();
         createAnEventRequest.setId(organizer.getId());
@@ -53,5 +53,22 @@ private TicketRepository ticketRepository;
         assertTrue(addTicketToEventResponse.getMessage().contains("success"));
         assertEquals(1, ticketRepository.count());
 
+    }
+
+    @Test
+    public void throwsExceptionWhenOrganizerTriesToAddTicketWithoutCreatingAnEventFirst(){
+        RegisterRequest registerRequest = new RegisterRequest();
+        registerRequest.setUsername("my username");
+        registerRequest.setEmail("myname@gmail.com");
+        registerRequest.setPassword("my password");
+        RegisterResponse organizer = organizerService.registerOrganizer(registerRequest);
+
+        AddTicketToEventRequest addTicketToEventRequest = new AddTicketToEventRequest();
+        addTicketToEventRequest.setTicketType(TicketType.VIP);
+        addTicketToEventRequest.setId(organizer.getId());
+        addTicketToEventRequest.setPrice(6000.0);
+        addTicketToEventRequest.setAvailableSeats(20);
+        addTicketToEventRequest.setTypeOfEvent(EventType.CONCERT);
+        assertThrows(NoExistingEventException.class, () -> ticketService.addTicketToEvent(addTicketToEventRequest));
     }
 }

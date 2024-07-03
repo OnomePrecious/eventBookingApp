@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-@Slf4j
 public class EventServiceImpl implements EventService{
     private final EventRepository eventRepository;
     private final OrganizerRepository organizerRepository;

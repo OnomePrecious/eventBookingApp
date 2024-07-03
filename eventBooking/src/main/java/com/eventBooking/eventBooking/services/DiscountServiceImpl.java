@@ -27,8 +27,8 @@ public class DiscountServiceImpl implements DiscountService{
     @Override
     public CreateDiscountForTicketResponse createDiscountForTicket(CreateDiscountForTicketRequest createDiscountForTicketrequest) {
         Discount discount = new Discount();
-        Ticket ticket = ticketRepository.findById(createDiscountForTicketrequest.getId()).orElseThrow(()-> new NoTicketsAvailableException("No tickets available for discount"));
         Organizer organizer = organizerRepository.findById(createDiscountForTicketrequest.getOrganizerId()).orElseThrow(()-> new OrganizerDoesNotExistException("No organizer available"));
+        Ticket ticket = ticketRepository.findById(createDiscountForTicketrequest.getId()).orElseThrow(()-> new NoTicketsAvailableException("No tickets available for discount"));
         modelMapper.map(discount, createDiscountForTicketrequest);
         discountRepository.save(discount);
         ticketRepository.save(ticket);

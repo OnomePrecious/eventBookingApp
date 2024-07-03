@@ -1,4 +1,4 @@
-package com.eventBooking.eventBooking.security.config;
+package com.eventBooking.eventBooking.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

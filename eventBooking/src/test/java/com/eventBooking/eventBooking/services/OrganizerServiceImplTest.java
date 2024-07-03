@@ -4,6 +4,7 @@ import com.eventBooking.eventBooking.data.repositories.OrganizerRepository;
 import com.eventBooking.eventBooking.dtos.Request.CreateAnEventRequest;
 import com.eventBooking.eventBooking.dtos.Request.RegisterRequest;
 import com.eventBooking.eventBooking.dtos.Response.RegisterResponse;
+import com.eventBooking.eventBooking.exception.InvalidDetailsException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,4 +30,8 @@ class OrganizerServiceImplTest {
         assertEquals(1, organizerRepository.count());
     }
 
-}
+
+
+
+    }
+

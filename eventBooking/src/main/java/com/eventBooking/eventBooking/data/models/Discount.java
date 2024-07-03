@@ -12,4 +12,5 @@ public class Discount {
     @Id
     private Long id;
     private int amount;
+    private int percentage;
 }

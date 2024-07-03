@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 import static jakarta.persistence.GenerationType.IDENTITY;
 
     @Entity
@@ -20,6 +22,9 @@ import static jakarta.persistence.GenerationType.IDENTITY;
         @Column(unique = true)
         private String email;
         private String password;
+        @ElementCollection
+        @Enumerated(EnumType.STRING)
+        private List<EventType> event;
 
 
 

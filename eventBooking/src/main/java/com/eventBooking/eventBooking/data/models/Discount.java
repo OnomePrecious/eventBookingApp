@@ -5,9 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-
-public class Event {
+public class Discount {
     private Long id;
-    private EventType typeOfEvent;
-    private Ticket ticket;
+    private int amount;
 }

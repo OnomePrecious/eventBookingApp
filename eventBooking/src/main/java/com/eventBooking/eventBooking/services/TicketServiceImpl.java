@@ -25,9 +25,6 @@ public class TicketServiceImpl implements TicketService{
         modelMapper.map(ticket, addTicketToEventRequest);
         eventRepository.save(event);
         ticketRepository.save(ticket);
-//        ticket.setEvent(addTicketToEventRequest.getEvent());
-//        ticket.setTicketType(addTicketToEventRequest.getTicketType());
-//        ticket.setPrice(addTicketToEventRequest.getPrice());
         AddTicketToEventResponse addTicketToEventResponse = modelMapper.map(ticket, AddTicketToEventResponse.class);
         addTicketToEventResponse.setMessage("Ticket added successfully");
         return addTicketToEventResponse;

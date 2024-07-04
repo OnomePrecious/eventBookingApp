@@ -1,10 +1,14 @@
 package com.eventBooking.eventBooking.services;
 
+import com.eventBooking.eventBooking.data.models.EventType;
 import com.eventBooking.eventBooking.data.models.TicketType;
+import com.eventBooking.eventBooking.data.repositories.EventRepository;
 import com.eventBooking.eventBooking.data.repositories.GuestRepository;
 import com.eventBooking.eventBooking.data.repositories.OrganizerRepository;
+import com.eventBooking.eventBooking.dtos.Request.CreateAnEventRequest;
 import com.eventBooking.eventBooking.dtos.Request.CreateGuestListRequest;
 import com.eventBooking.eventBooking.dtos.Request.RegisterRequest;
+import com.eventBooking.eventBooking.dtos.Response.CreateAnEventResponse;
 import com.eventBooking.eventBooking.dtos.Response.CreateGuestListResponse;
 import com.eventBooking.eventBooking.dtos.Response.RegisterResponse;
 import org.junit.jupiter.api.Test;
@@ -20,7 +24,7 @@ class OrganizerServiceImplTest {
     @Autowired
     private OrganizerRepository organizerRepository;
     @Autowired
-    private GuestRepository guestRepository;
+    private EventService eventService;
 
     @Test
     void testThatAnOrganizerCanRegister() {
@@ -42,8 +46,16 @@ class OrganizerServiceImplTest {
         registerRequest.setPassword("my password");
         RegisterResponse organizer = organizerService.registerOrganizer(registerRequest);
 
-        CreateGuestListRequest addToGuestList = new CreateGuestListRequest();
-        addToGuestList.setGuestId(organizer.getId());
+    CreateAnEventRequest createAnEventRequest = new CreateAnEventRequest();
+    createAnEventRequest.setId(organizer.getId());
+    createAnEventRequest.setTypeOfEvent(EventType.BIRTHDAY);
+    createAnEventRequest.setAddress("Abuja");
+    createAnEventRequest.setNumberOfTickets(50);
+    createAnEventRequest.setNumberOfGuest(50);
+    CreateAnEventResponse response = eventService.createEvent(createAnEventRequest);
+
+    CreateGuestListRequest addToGuestList = new CreateGuestListRequest();
+        addToGuestList.setEventId(response.getId());
         addToGuestList.setGuestName("John Doe");
         addToGuestList.setGuestName("Abigail Peter");
         addToGuestList.setGuestName("Michael Johnson");

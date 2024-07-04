@@ -54,7 +54,7 @@ public class OrganizerServiceImpl implements OrganizerService {
         guestRepository.save(guest);
         var guests = eventRepository.findGuestsBy(createGuestListRequest.getEventId());
         CreateGuestListResponse createGuestListResponse = new CreateGuestListResponse();
-//        createGuestListResponse.setNumberOfGuest(guests.());
+        createGuestListResponse.setNumberOfGuest(guests.size());
         createGuestListResponse.setMessage("Guest list created successfully");
         return createGuestListResponse;
     }

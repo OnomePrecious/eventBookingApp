@@ -11,8 +11,7 @@ import lombok.Setter;
 public class Guest {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private Long organizerId;
+    private Long eventId;
     private String name;
     @ManyToOne
     private Organizer organizer;

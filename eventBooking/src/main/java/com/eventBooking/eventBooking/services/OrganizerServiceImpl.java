@@ -9,7 +9,6 @@ import com.eventBooking.eventBooking.dtos.Request.CreateGuestListRequest;
 import com.eventBooking.eventBooking.dtos.Request.RegisterRequest;
 import com.eventBooking.eventBooking.dtos.Response.CreateGuestListResponse;
 import com.eventBooking.eventBooking.dtos.Response.RegisterResponse;
-import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -52,7 +51,7 @@ public class OrganizerServiceImpl implements OrganizerService {
         guest.setName(createGuestListRequest.getGuestName());
         guest.setEventId(createGuestListRequest.getEventId());
         guestRepository.save(guest);
-        var guests = eventRepository.findGuestsBy(createGuestListRequest.getEventId());
+        var guests = eventRepository.findEventById(createGuestListRequest.getEventId());
         CreateGuestListResponse createGuestListResponse = new CreateGuestListResponse();
         createGuestListResponse.setNumberOfGuest(guests.size());
         createGuestListResponse.setMessage("Guest list created successfully");

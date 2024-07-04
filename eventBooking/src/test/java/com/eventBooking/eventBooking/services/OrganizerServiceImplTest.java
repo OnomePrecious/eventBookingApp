@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
@@ -25,6 +26,8 @@ class OrganizerServiceImplTest {
     private OrganizerRepository organizerRepository;
     @Autowired
     private EventService eventService;
+    @Autowired
+    private GuestRepository guestRepository;
 
     @Test
     void testThatAnOrganizerCanRegister() {
@@ -38,7 +41,7 @@ class OrganizerServiceImplTest {
         assertEquals("my username", registerRequest.getUsername());
         assertEquals(1, organizerRepository.count());
     }
-@Test
+    @Test
     public void testThatAnOrganizerCanAddToGuestList(){
         RegisterRequest registerRequest = new RegisterRequest();
         registerRequest.setUsername("my username");
@@ -46,29 +49,76 @@ class OrganizerServiceImplTest {
         registerRequest.setPassword("my password");
         RegisterResponse organizer = organizerService.registerOrganizer(registerRequest);
 
-    CreateAnEventRequest createAnEventRequest = new CreateAnEventRequest();
-    createAnEventRequest.setId(organizer.getId());
-    createAnEventRequest.setTypeOfEvent(EventType.BIRTHDAY);
-    createAnEventRequest.setAddress("Abuja");
-    createAnEventRequest.setNumberOfTickets(50);
-    createAnEventRequest.setNumberOfGuest(50);
-    CreateAnEventResponse response = eventService.createEvent(createAnEventRequest);
+        CreateAnEventRequest createAnEventRequest = new CreateAnEventRequest();
+        createAnEventRequest.setId(organizer.getId());
+        createAnEventRequest.setTypeOfEvent(EventType.BIRTHDAY);
+        createAnEventRequest.setAddress("Abuja");
+        createAnEventRequest.setNumberOfTickets(50);
+        createAnEventRequest.setNumberOfGuest(50);
+        CreateAnEventResponse response = eventService.createEvent(createAnEventRequest);
 
-    CreateGuestListRequest addToGuestList = new CreateGuestListRequest();
+        CreateGuestListRequest addToGuestList = new CreateGuestListRequest();
         addToGuestList.setEventId(response.getId());
         addToGuestList.setGuestName("John Doe");
-        addToGuestList.setGuestName("Abigail Peter");
-        addToGuestList.setGuestName("Michael Johnson");
-        addToGuestList.setGuestName("Peter Jackson");
-        addToGuestList.setGuestName("Paul Joseph");
         addToGuestList.setTicketType(TicketType.VVIP);
         CreateGuestListResponse addToGuestListResponse = organizerService.createGuestList(addToGuestList);
         assertNotNull(addToGuestListResponse);
         assertTrue(addToGuestListResponse.getMessage().contains("success"));
-        assertThat(addToGuestListResponse.getNumberOfGuest()).isEqualTo(5);
+        assertThat(addToGuestListResponse.getNumberOfGuest()).isEqualTo(1);
+        assertEquals(1, guestRepository.count());
 
 
 }
+    @Test
+    public void testThatAnOrganizerCanAddMoreGuestToGuestList() {
+        RegisterRequest registerRequest = new RegisterRequest();
+        registerRequest.setUsername("my username");
+        registerRequest.setEmail("myname@gmail.com");
+        registerRequest.setPassword("my password");
+        RegisterResponse organizer = organizerService.registerOrganizer(registerRequest);
+
+        CreateAnEventRequest createAnEventRequest = new CreateAnEventRequest();
+        createAnEventRequest.setId(organizer.getId());
+        createAnEventRequest.setTypeOfEvent(EventType.FESTIVAL);
+        createAnEventRequest.setAddress("Lagos");
+        createAnEventRequest.setNumberOfTickets(50);
+        createAnEventRequest.setNumberOfGuest(50);
+        CreateAnEventResponse response = eventService.createEvent(createAnEventRequest);
+
+        CreateGuestListRequest addToGuestList = new CreateGuestListRequest();
+        addToGuestList.setEventId(response.getId());
+        addToGuestList.setGuestName("John Doe");
+        addToGuestList.setTicketType(TicketType.VVIP);
+
+        CreateGuestListRequest addToGuestList1 = new CreateGuestListRequest();
+        addToGuestList1.setEventId(response.getId());
+        addToGuestList1.setGuestName("Michael Johnson");
+        addToGuestList1.setTicketType(TicketType.VIP);
+
+        CreateGuestListRequest addToGuestList2 = new CreateGuestListRequest();
+        addToGuestList2.setEventId(response.getId());
+        addToGuestList2.setGuestName("Peter Jackson");
+        addToGuestList2.setTicketType(TicketType.VVIP);
+
+        CreateGuestListRequest addToGuestList3 = new CreateGuestListRequest();
+        addToGuestList3.setEventId(response.getId());
+        addToGuestList3.setGuestName("Peter Jackson");
+        addToGuestList3.setTicketType(TicketType.VIP);
+
+
+        organizerService.createGuestList(addToGuestList);
+        organizerService.createGuestList(addToGuestList1);
+        organizerService.createGuestList(addToGuestList2);
+      CreateGuestListResponse createGuestListResponse = organizerService.createGuestList(addToGuestList3);
+
+        assertNotNull(createGuestListResponse);
+        assertTrue(createGuestListResponse.getMessage().contains("success"));
+        assertThat(createGuestListResponse.getNumberOfGuest()).isEqualTo(4);
+        assertEquals(4, guestRepository.count());
+
+
+    }
+
 
 
 

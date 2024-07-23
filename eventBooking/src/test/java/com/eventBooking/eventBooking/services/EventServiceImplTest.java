@@ -13,6 +13,7 @@ import com.eventBooking.eventBooking.dtos.Response.AddTicketToEventResponse;
 import com.eventBooking.eventBooking.dtos.Response.CreateAnEventResponse;
 import com.eventBooking.eventBooking.dtos.Response.RegisterResponse;
 import com.eventBooking.eventBooking.dtos.Response.ReserveTicketResponse;
+import com.eventBooking.eventBooking.exception.NoTicketsAvailableException;
 import com.eventBooking.eventBooking.exception.OrganizerDoesNotExistException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -87,11 +88,39 @@ class EventServiceImplTest {
         addTicketToEventRequest.setTypeOfEvent(EventType.CONCERT);
         AddTicketToEventResponse response = ticketService.addTicketToEvent(addTicketToEventRequest);
 
-        // Assuming there re 50 tickets available
         ReserveTicketRequest reserveTicketRequest = new ReserveTicketRequest();
         reserveTicketRequest.setTicketId(response.getId());
         reserveTicketRequest.setAvailableTicket(createAnEventRequest.getNumberOfTickets());
         ReserveTicketResponse reserveTicketResponse = eventService.reserveTicket(reserveTicketRequest);
         assertNotNull(reserveTicketResponse);
+    }
+    @Test
+    public void throwsTicketNotAvailableExceptionWhenThereIsNoTicketToReserve(){
+        RegisterRequest registerRequest = new RegisterRequest();
+        registerRequest.setUsername("my username");
+        registerRequest.setEmail("myname@gmail.com");
+        registerRequest.setPassword("my password");
+        RegisterResponse organizer = organizerService.registerOrganizer(registerRequest);
+        assertNotNull(organizer.getId());
+        CreateAnEventRequest createAnEventRequest = new CreateAnEventRequest();
+        createAnEventRequest.setId(organizer.getId());
+        createAnEventRequest.setTypeOfEvent(EventType.BIRTHDAY);
+        createAnEventRequest.setAddress("Abuja");
+        createAnEventRequest.setNumberOfTickets(50);
+        createAnEventRequest.setNumberOfGuest(50);
+        eventService.createEvent(createAnEventRequest);
+
+        AddTicketToEventRequest addTicketToEventRequest = new AddTicketToEventRequest();
+        addTicketToEventRequest.setTicketType(TicketType.REGULAR);
+        addTicketToEventRequest.setId(createAnEventRequest.getId());
+        addTicketToEventRequest.setPrice(4000.0);
+        addTicketToEventRequest.setAvailableSeats(createAnEventRequest.getNumberOfTickets());
+        addTicketToEventRequest.setTypeOfEvent(EventType.CONCERT);
+        AddTicketToEventResponse response = ticketService.addTicketToEvent(addTicketToEventRequest);
+        ReserveTicketRequest reserveTicketRequest = new ReserveTicketRequest();
+        reserveTicketRequest.setTicketId(response.getId());
+        reserveTicketRequest.setAvailableTicket(createAnEventRequest.getNumberOfTickets()+1);
+        assertThrows(NoTicketsAvailableException.class, () -> eventService.reserveTicket(reserveTicketRequest));
+
     }
 }

@@ -91,7 +91,7 @@ class OrganizerServiceImplTest {
         addToGuestList.setTicketType(TicketType.VVIP);
 
         CreateGuestListResponse createGuestListResponse = organizerService.createGuestList(addToGuestList);
-        assertNotNull(createGuestListResponse);
+     assertNotNull(createGuestListResponse.getMessage());
         assertTrue(createGuestListResponse.getMessage().contains("success"));
         assertThat(createGuestListResponse.getNumberOfGuest()).isEqualTo(1);
         assertEquals(1, guestRepository.count());

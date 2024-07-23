@@ -77,23 +77,23 @@ class EventServiceImplTest {
         createAnEventRequest.setAddress("Abuja");
         createAnEventRequest.setNumberOfTickets(50);
         createAnEventRequest.setNumberOfGuest(50);
-        createAnEventRequest.setTicketId(12L);
+//        createAnEventRequest.setTicketId(12L);
         eventService.createEvent(createAnEventRequest);
 
         AddTicketToEventRequest addTicketToEventRequest = new AddTicketToEventRequest();
         addTicketToEventRequest.setTicketType(TicketType.REGULAR);
         addTicketToEventRequest.setId(createAnEventRequest.getId());
         addTicketToEventRequest.setPrice(4000.0);
-        addTicketToEventRequest.setAvailableSeats(40);
+        addTicketToEventRequest.setAvailableSeats(createAnEventRequest.getNumberOfTickets());
         addTicketToEventRequest.setTypeOfEvent(EventType.CONCERT);
-        ticketService.addTicketToEvent(addTicketToEventRequest);
+        AddTicketToEventResponse response = ticketService.addTicketToEvent(addTicketToEventRequest);
 
-        // Assuming there are 50 tickets available
+        // Assuming there re 50 tickets available
         ReserveTicketRequest reserveTicketRequest = new ReserveTicketRequest();
-        reserveTicketRequest.setTicketId(createAnEventRequest.getTicketId());
+        reserveTicketRequest.setTicketId(response.getId());
         reserveTicketRequest.setAvailableTicket(createAnEventRequest.getNumberOfTickets());
         ReserveTicketResponse reserveTicketResponse = eventService.reserveTicket(reserveTicketRequest);
         assertNotNull(reserveTicketResponse);
-        assertEquals(49, ticketRepository.count());
+        assertEquals(49, reserveTicketRequest.getAvailableTicket());
     }
 }

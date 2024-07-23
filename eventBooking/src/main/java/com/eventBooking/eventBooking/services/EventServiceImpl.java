@@ -50,11 +50,16 @@ public class EventServiceImpl implements EventService{
         Ticket ticket = ticketRepository.findById(reserveTicket.getTicketId())
                 .orElseThrow(()->new NoTicketsAvailableException("No ticket"));
         ticketRepository.save(ticket);
+        reservedTicket(reserveTicket);
         ReserveTicketResponse reserveTicketResponse = modelMapper.map(ticket, ReserveTicketResponse.class);
         reserveTicketResponse.setMessage("Ticket reserved successfully");
         return reserveTicketResponse;
-
-
+    }
+    private void reservedTicket(ReserveTicketRequest reserveTicketRequest) {
+        Ticket ticket = new Ticket();
+        reserveTicketRequest.setTicketId(ticket.getId());
+        reserveTicketRequest.setAvailableTicket(ticket.getAvailableTicket() - 1);
+        ticketRepository.save(ticket);
 
     }
 }

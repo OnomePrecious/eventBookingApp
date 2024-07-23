@@ -67,8 +67,8 @@ class EventServiceImplTest {
     @Test
     void reserveTicket() {
         RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setUsername("my username");
-        registerRequest.setEmail("myname@gmail.com");
+        registerRequest.setUsername("precious");
+        registerRequest.setEmail("precious@gmail.com");
         registerRequest.setPassword("my password");
         RegisterResponse organizer = organizerService.registerOrganizer(registerRequest);
         assertNotNull(organizer.getId());
@@ -98,7 +98,7 @@ class EventServiceImplTest {
     public void throwsTicketNotAvailableExceptionWhenThereIsNoTicketToReserve(){
         RegisterRequest registerRequest = new RegisterRequest();
         registerRequest.setUsername("my username");
-        registerRequest.setEmail("myname@gmail.com");
+        registerRequest.setEmail("presh@gmail.com");
         registerRequest.setPassword("my password");
         RegisterResponse organizer = organizerService.registerOrganizer(registerRequest);
         assertNotNull(organizer.getId());

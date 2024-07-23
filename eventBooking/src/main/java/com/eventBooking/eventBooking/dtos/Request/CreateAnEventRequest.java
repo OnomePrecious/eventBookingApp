@@ -16,5 +16,6 @@ public class CreateAnEventRequest {
     private EventType typeOfEvent;
     private int numberOfGuest;
     private int numberOfTickets;
+    private Long ticketId;
 
 }

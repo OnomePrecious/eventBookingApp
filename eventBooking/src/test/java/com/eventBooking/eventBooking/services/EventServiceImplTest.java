@@ -3,10 +3,13 @@ package com.eventBooking.eventBooking.services;
 import com.eventBooking.eventBooking.data.models.EventType;
 import com.eventBooking.eventBooking.data.models.Ticket;
 import com.eventBooking.eventBooking.data.repositories.EventRepository;
+import com.eventBooking.eventBooking.data.repositories.TicketRepository;
 import com.eventBooking.eventBooking.dtos.Request.CreateAnEventRequest;
 import com.eventBooking.eventBooking.dtos.Request.RegisterRequest;
+import com.eventBooking.eventBooking.dtos.Request.ReserveTicketRequest;
 import com.eventBooking.eventBooking.dtos.Response.CreateAnEventResponse;
 import com.eventBooking.eventBooking.dtos.Response.RegisterResponse;
+import com.eventBooking.eventBooking.dtos.Response.ReserveTicketResponse;
 import com.eventBooking.eventBooking.exception.OrganizerDoesNotExistException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -22,6 +25,8 @@ class EventServiceImplTest {
     private EventService eventService;
     @Autowired
     private EventRepository eventRepository;
+    @Autowired
+    private TicketRepository ticketRepository;
     @Test
     void testThatOrganizerCanCreateAnEvent() {
         RegisterRequest registerRequest = new RegisterRequest();
@@ -51,5 +56,30 @@ class EventServiceImplTest {
         createAnEventRequest.setNumberOfTickets(50);
         createAnEventRequest.setNumberOfGuest(50);
         assertThrows(OrganizerDoesNotExistException.class, () -> eventService.createEvent(createAnEventRequest));
+    }
+
+    @Test
+    void reserveTicket() {
+        RegisterRequest registerRequest = new RegisterRequest();
+        registerRequest.setUsername("my username");
+        registerRequest.setEmail("myname@gmail.com");
+        registerRequest.setPassword("my password");
+        RegisterResponse organizer = organizerService.registerOrganizer(registerRequest);
+        assertNotNull(organizer.getId());
+        CreateAnEventRequest createAnEventRequest = new CreateAnEventRequest();
+        createAnEventRequest.setId(organizer.getId());
+        createAnEventRequest.setTypeOfEvent(EventType.BIRTHDAY);
+        createAnEventRequest.setAddress("Abuja");
+        createAnEventRequest.setNumberOfTickets(50);
+        createAnEventRequest.setNumberOfGuest(50);
+        eventService.createEvent(createAnEventRequest);
+
+        // Assuming there are 50 tickets available
+        ReserveTicketRequest reserveTicketRequest = new ReserveTicketRequest();
+        reserveTicketRequest.setTicketId(createAnEventRequest.getId());
+        reserveTicketRequest.setAvailableTicket(createAnEventRequest.getNumberOfTickets());
+        ReserveTicketResponse reserveTicketResponse = eventService.reserveTicket(reserveTicketRequest);
+        assertNotNull(reserveTicketResponse);
+        assertEquals(49, ticketRepository.count());
     }
 }

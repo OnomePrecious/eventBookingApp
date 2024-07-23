@@ -13,6 +13,7 @@ public class CreateGuestListRequest {
     private Long eventId;
     private List<Guest> guestList;
     private String GuestName;
+    private int numberOfGuest;
     private TicketType ticketType;
 
 }

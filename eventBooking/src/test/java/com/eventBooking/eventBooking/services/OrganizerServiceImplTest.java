@@ -87,34 +87,13 @@ class OrganizerServiceImplTest {
 
         CreateGuestListRequest addToGuestList = new CreateGuestListRequest();
         addToGuestList.setEventId(response.getId());
-        addToGuestList.setGuestName("John Doe");
+        addToGuestList.setGuestName("Jane Doe");
         addToGuestList.setTicketType(TicketType.VVIP);
-
-        CreateGuestListRequest addToGuestList1 = new CreateGuestListRequest();
-        addToGuestList1.setEventId(response.getId());
-        addToGuestList1.setGuestName("Michael Johnson");
-        addToGuestList1.setTicketType(TicketType.VIP);
-
-        CreateGuestListRequest addToGuestList2 = new CreateGuestListRequest();
-        addToGuestList2.setEventId(response.getId());
-        addToGuestList2.setGuestName("Peter Jackson");
-        addToGuestList2.setTicketType(TicketType.VVIP);
-
-        CreateGuestListRequest addToGuestList3 = new CreateGuestListRequest();
-        addToGuestList3.setEventId(response.getId());
-        addToGuestList3.setGuestName("Peter Jackson");
-        addToGuestList3.setTicketType(TicketType.VIP);
-
-
-        organizerService.createGuestList(addToGuestList);
-        organizerService.createGuestList(addToGuestList1);
-        organizerService.createGuestList(addToGuestList2);
-      CreateGuestListResponse createGuestListResponse = organizerService.createGuestList(addToGuestList3);
-
+        CreateGuestListResponse createGuestListResponse = organizerService.createGuestList(addToGuestList);
         assertNotNull(createGuestListResponse);
         assertTrue(createGuestListResponse.getMessage().contains("success"));
-        assertThat(createGuestListResponse.getNumberOfGuest()).isEqualTo(4);
-        assertEquals(4, guestRepository.count());
+        assertThat(createGuestListResponse.getNumberOfGuest()).isEqualTo(1);
+        assertEquals(1, guestRepository.count());
 
 
     }

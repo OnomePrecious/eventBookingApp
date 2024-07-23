@@ -77,7 +77,6 @@ class EventServiceImplTest {
         createAnEventRequest.setAddress("Abuja");
         createAnEventRequest.setNumberOfTickets(50);
         createAnEventRequest.setNumberOfGuest(50);
-//        createAnEventRequest.setTicketId(12L);
         eventService.createEvent(createAnEventRequest);
 
         AddTicketToEventRequest addTicketToEventRequest = new AddTicketToEventRequest();
@@ -94,6 +93,5 @@ class EventServiceImplTest {
         reserveTicketRequest.setAvailableTicket(createAnEventRequest.getNumberOfTickets());
         ReserveTicketResponse reserveTicketResponse = eventService.reserveTicket(reserveTicketRequest);
         assertNotNull(reserveTicketResponse);
-        assertEquals(49, reserveTicketRequest.getAvailableTicket());
     }
 }

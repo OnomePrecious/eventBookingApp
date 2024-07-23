@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class EventServiceImpl implements EventService{
+public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
     private final OrganizerRepository organizerRepository;
     private final ModelMapper modelMapper;
@@ -31,12 +31,12 @@ public class EventServiceImpl implements EventService{
     public CreateAnEventResponse createEvent(CreateAnEventRequest createEventRequest) {
         Event event = new Event();
         Organizer organizer = organizerRepository.findById(createEventRequest.getId())
-                .orElseThrow(()->new OrganizerDoesNotExistException("No organizer to create event"));
+                .orElseThrow(() -> new OrganizerDoesNotExistException("No organizer to create event"));
         event.setTypeOfEvent(createEventRequest.getTypeOfEvent());
         event.setAddress(createEventRequest.getAddress());
         event.setNumberOfTickets(createEventRequest.getNumberOfTickets());
         event.setOrganizer(organizer);
-        event=eventRepository.save(event);
+        event = eventRepository.save(event);
         CreateAnEventResponse createEventResponse = modelMapper.map(event, CreateAnEventResponse.class);
 
         createEventResponse.setMessage("Event created successfully");
@@ -48,18 +48,11 @@ public class EventServiceImpl implements EventService{
         Guest guest = modelMapper.map(reserveTicket, Guest.class);
         guestRepository.save(guest);
         Ticket ticket = ticketRepository.findById(reserveTicket.getTicketId())
-                .orElseThrow(()->new NoTicketsAvailableException("No ticket"));
+                .orElseThrow(() -> new NoTicketsAvailableException("No ticket"));
         ticketRepository.save(ticket);
-        reservedTicket(reserveTicket);
         ReserveTicketResponse reserveTicketResponse = modelMapper.map(ticket, ReserveTicketResponse.class);
         reserveTicketResponse.setMessage("Ticket reserved successfully");
         return reserveTicketResponse;
     }
-    private void reservedTicket(ReserveTicketRequest reserveTicketRequest) {
-        Ticket ticket = new Ticket();
-        reserveTicketRequest.setTicketId(ticket.getId());
-        reserveTicketRequest.setAvailableTicket(ticket.getAvailableTicket() - 1);
-        ticketRepository.save(ticket);
 
-    }
 }

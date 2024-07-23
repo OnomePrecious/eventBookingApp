@@ -1,5 +1,6 @@
 package com.eventBooking.eventBooking.services;
 
+import com.eventBooking.eventBooking.data.models.Event;
 import com.eventBooking.eventBooking.data.models.Guest;
 import com.eventBooking.eventBooking.data.models.Organizer;
 import com.eventBooking.eventBooking.data.repositories.EventRepository;
@@ -9,6 +10,7 @@ import com.eventBooking.eventBooking.dtos.Request.CreateGuestListRequest;
 import com.eventBooking.eventBooking.dtos.Request.RegisterRequest;
 import com.eventBooking.eventBooking.dtos.Response.CreateGuestListResponse;
 import com.eventBooking.eventBooking.dtos.Response.RegisterResponse;
+import com.eventBooking.eventBooking.exception.OrganizerDoesNotExistException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,7 +24,7 @@ public class OrganizerServiceImpl implements OrganizerService {
     private final EventRepository eventRepository;
 
     @Autowired
-    public OrganizerServiceImpl(ModelMapper modelMapper, PasswordEncoder passwordEncoder, EventRepository eventRepository, OrganizerRepository organizerRepository, GuestRepository guestRepository) {
+    public OrganizerServiceImpl(ModelMapper modelMapper, EventRepository eventRepository,  PasswordEncoder passwordEncoder, OrganizerRepository organizerRepository, GuestRepository guestRepository) {
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
         this.organizerRepository = organizerRepository;
@@ -47,14 +49,16 @@ public class OrganizerServiceImpl implements OrganizerService {
 
     @Override
     public CreateGuestListResponse createGuestList(CreateGuestListRequest createGuestListRequest) {
-        Guest guest = new Guest();
-        guest.setName(createGuestListRequest.getGuestName());
-        guest.setEventId(createGuestListRequest.getEventId());
+        Event event = eventRepository.findById(createGuestListRequest.getEventId())
+                .orElseThrow(()->new OrganizerDoesNotExistException("No organizer to create event"));
+
+        Guest guest = modelMapper.map(createGuestListRequest, Guest.class);
         guestRepository.save(guest);
-        var guests = eventRepository.findEventById(createGuestListRequest.getEventId());
-        CreateGuestListResponse createGuestListResponse = new CreateGuestListResponse();
-        createGuestListResponse.setNumberOfGuest(guests.size());
-        createGuestListResponse.setMessage("Guest list created successfully");
+        eventRepository.save(event);
+//        Event event = eventRepository.findEventById(createGuestListRequest.getEventId());
+        CreateGuestListResponse createGuestListResponse = modelMapper.map(guest, CreateGuestListResponse.class);
+        createGuestListResponse.setMessage("Guest added successfully");
+        createGuestListResponse.setNumberOfGuest(1);
         return createGuestListResponse;
-    }
+   }
 }

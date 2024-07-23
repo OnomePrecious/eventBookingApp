@@ -58,7 +58,7 @@ public class OrganizerServiceImpl implements OrganizerService {
 //        Event event = eventRepository.findEventById(createGuestListRequest.getEventId());
         CreateGuestListResponse createGuestListResponse = modelMapper.map(guest, CreateGuestListResponse.class);
         createGuestListResponse.setMessage("Guest added successfully");
-        createGuestListResponse.setNumberOfGuest(1);
+//        createGuestListResponse.setNumberOfGuest(1);
         return createGuestListResponse;
    }
 }

@@ -89,7 +89,13 @@ class OrganizerServiceImplTest {
         addToGuestList.setEventId(response.getId());
         addToGuestList.setGuestName("Jane Doe");
         addToGuestList.setTicketType(TicketType.VVIP);
+//        CreateGuestListRequest addToGuestList1 = new CreateGuestListRequest();
+//        addToGuestList1.setEventId(response.getId());
+//        addToGuestList1.setGuestName("Jone Doe");
+//        addToGuestList1.setTicketType(TicketType.VVIP);
+
         CreateGuestListResponse createGuestListResponse = organizerService.createGuestList(addToGuestList);
+//        CreateGuestListResponse createGuestListResponse1 = organizerService.createGuestList(addToGuestList1);
         assertNotNull(createGuestListResponse);
         assertTrue(createGuestListResponse.getMessage().contains("success"));
         assertThat(createGuestListResponse.getNumberOfGuest()).isEqualTo(1);

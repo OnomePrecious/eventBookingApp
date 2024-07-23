@@ -118,7 +118,7 @@ class EventServiceImplTest {
         addTicketToEventRequest.setTypeOfEvent(EventType.CONCERT);
         ticketService.addTicketToEvent(addTicketToEventRequest);
         ReserveTicketRequest reserveTicketRequest = new ReserveTicketRequest();
-        reserveTicketRequest.setTicketId(reserveTicketRequest.getTicketId());
+        reserveTicketRequest.setTicketId(10L);
         reserveTicketRequest.setAvailableTicket(createAnEventRequest.getNumberOfTickets()+1);
         assertThrows(NoTicketsAvailableException.class, () -> eventService.reserveTicket(reserveTicketRequest));
 

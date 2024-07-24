@@ -63,7 +63,7 @@ public class EventBookingController {
     }
 
 
-    @PostMapping
+    @PostMapping("/addDiscountToTicket")
     public ResponseEntity<?> createDiscountForTicket(@RequestBody CreateDiscountForTicketRequest discountRequest){
         try {
             var result = discountService.createDiscountForTicket(discountRequest);

@@ -1,9 +1,6 @@
 package com.eventBooking.eventBooking.controllers;
 
-import com.eventBooking.eventBooking.dtos.Request.AddTicketToEventRequest;
-import com.eventBooking.eventBooking.dtos.Request.CreateAnEventRequest;
-import com.eventBooking.eventBooking.dtos.Request.CreateDiscountForTicketRequest;
-import com.eventBooking.eventBooking.dtos.Request.RegisterRequest;
+import com.eventBooking.eventBooking.dtos.Request.*;
 import com.eventBooking.eventBooking.dtos.Response.ApiResponse;
 import com.eventBooking.eventBooking.services.DiscountService;
 import com.eventBooking.eventBooking.services.EventService;
@@ -66,6 +63,15 @@ public class EventBookingController {
             var result = discountService.createDiscountForTicket(discountRequest);
             return new ResponseEntity<>(new ApiResponse(true, result), CREATED);
         }catch(Exception e){
+            return new ResponseEntity<>(new ApiResponse(false, e.getMessage()), BAD_REQUEST);
+        }
+        }
+        @PostMapping
+    public ResponseEntity<?> createGuestList(@RequestBody CreateGuestListRequest guestListRequest){
+        try {
+            var result = organizerService.createGuestList(guestListRequest);
+            return new ResponseEntity<>(new ApiResponse(true, result), CREATED);
+        } catch(Exception e){
             return new ResponseEntity<>(new ApiResponse(false, e.getMessage()), BAD_REQUEST);
         }
         }

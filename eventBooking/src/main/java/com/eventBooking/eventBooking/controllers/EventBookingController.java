@@ -84,7 +84,7 @@ public class EventBookingController {
         }
         }
 
-        @PostMapping
+        @PostMapping("/bookTicket")
     public ResponseEntity<?> bookTicket(@RequestBody ReserveTicketRequest reservationRequest){
         try {
             var result = eventService.reserveTicket(reservationRequest);

@@ -2,8 +2,10 @@ package com.eventBooking.eventBooking.controllers;
 
 import com.eventBooking.eventBooking.dtos.Request.AddTicketToEventRequest;
 import com.eventBooking.eventBooking.dtos.Request.CreateAnEventRequest;
+import com.eventBooking.eventBooking.dtos.Request.CreateDiscountForTicketRequest;
 import com.eventBooking.eventBooking.dtos.Request.RegisterRequest;
 import com.eventBooking.eventBooking.dtos.Response.ApiResponse;
+import com.eventBooking.eventBooking.services.DiscountService;
 import com.eventBooking.eventBooking.services.EventService;
 import com.eventBooking.eventBooking.services.OrganizerService;
 import com.eventBooking.eventBooking.services.TicketService;
@@ -26,6 +28,8 @@ public class EventBookingController {
     private OrganizerService organizerService;
     @Autowired
     private TicketService ticketService;
+    @Autowired
+    private DiscountService discountService;
 
     @PostMapping
     public ResponseEntity<?> registerOrganizer(@RequestBody RegisterRequest registerRequest){
@@ -56,4 +60,14 @@ public class EventBookingController {
 
         }
     }
-}
+    @PostMapping
+    public ResponseEntity<?> createDiscountForTicket(@RequestBody CreateDiscountForTicketRequest discountRequest){
+        try {
+            var result = discountService.createDiscountForTicket(discountRequest);
+            return new ResponseEntity<>(new ApiResponse(true, result), CREATED);
+        }catch(Exception e){
+            return new ResponseEntity<>(new ApiResponse(false, e.getMessage()), BAD_REQUEST);
+        }
+        }
+    }
+

@@ -28,7 +28,7 @@ public class EventBookingController {
     @Autowired
     private DiscountService discountService;
 
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<?> registerOrganizer(@RequestBody RegisterRequest registerRequest){
         try{
             var result = organizerService.registerOrganizer(registerRequest);
@@ -40,7 +40,7 @@ public class EventBookingController {
     }
 
 
-    @PostMapping
+    @PostMapping("/createEvent")
     public ResponseEntity<?> createAnEvent(@RequestBody CreateAnEventRequest createAnEventRequest){
         try{
             var result = eventService.createEvent(createAnEventRequest);

@@ -38,6 +38,8 @@ public class EventBookingController {
 
         }
     }
+
+
     @PostMapping
     public ResponseEntity<?> createAnEvent(@RequestBody CreateAnEventRequest createAnEventRequest){
         try{
@@ -47,6 +49,8 @@ public class EventBookingController {
             return new ResponseEntity<>(new ApiResponse(false, e.getMessage()), BAD_REQUEST);
         }
     }
+
+
     @PostMapping
     public ResponseEntity<?> addTicketToEvent(@RequestBody AddTicketToEventRequest addTicketToEventRequest){
         try {
@@ -57,6 +61,8 @@ public class EventBookingController {
 
         }
     }
+
+
     @PostMapping
     public ResponseEntity<?> createDiscountForTicket(@RequestBody CreateDiscountForTicketRequest discountRequest){
         try {
@@ -66,6 +72,8 @@ public class EventBookingController {
             return new ResponseEntity<>(new ApiResponse(false, e.getMessage()), BAD_REQUEST);
         }
         }
+
+
         @PostMapping
     public ResponseEntity<?> createGuestList(@RequestBody CreateGuestListRequest guestListRequest){
         try {
@@ -73,6 +81,17 @@ public class EventBookingController {
             return new ResponseEntity<>(new ApiResponse(true, result), CREATED);
         } catch(Exception e){
             return new ResponseEntity<>(new ApiResponse(false, e.getMessage()), BAD_REQUEST);
+        }
+        }
+
+        @PostMapping
+    public ResponseEntity<?> bookTicket(@RequestBody ReserveTicketRequest reservationRequest){
+        try {
+            var result = eventService.reserveTicket(reservationRequest);
+            return new ResponseEntity<>(new ApiResponse(true, result), CREATED);
+        }catch (Exception e){
+            return new ResponseEntity<>(new ApiResponse(false, e.getMessage()), BAD_REQUEST);
+
         }
         }
     }

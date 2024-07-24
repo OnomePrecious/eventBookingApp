@@ -74,7 +74,7 @@ public class EventBookingController {
         }
 
 
-        @PostMapping
+        @PostMapping("/createGuestList")
     public ResponseEntity<?> createGuestList(@RequestBody CreateGuestListRequest guestListRequest){
         try {
             var result = organizerService.createGuestList(guestListRequest);

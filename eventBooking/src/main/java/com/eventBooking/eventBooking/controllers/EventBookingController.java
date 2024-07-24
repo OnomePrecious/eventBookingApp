@@ -51,7 +51,7 @@ public class EventBookingController {
     }
 
 
-    @PostMapping
+    @PostMapping("/addTicket")
     public ResponseEntity<?> addTicketToEvent(@RequestBody AddTicketToEventRequest addTicketToEventRequest){
         try {
             var result = ticketService.addTicketToEvent(addTicketToEventRequest);
